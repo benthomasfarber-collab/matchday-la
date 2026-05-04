@@ -85,36 +85,41 @@ matchday-la/
 │   ├── DECISIONS.md             ← architectural decisions (do not revisit)
 │   └── SPEC.md                  ← full product specification
 ├── app/
-│   ├── (auth)/                  ← sign up / sign in screens
-│   ├── (tabs)/                  ← main tab navigation
-│   │   ├── discover/            ← browse fans by nationality/match
-│   │   ├── matches/             ← match schedule + groups
-│   │   ├── events/              ← watch party events
-│   │   └── profile/             ← user profile
-│   └── chat/                    ← DMs + group chat
-├── components/
+│   ├── (public)/                ← unauthenticated screens (welcome, sign-in, sign-up)
+│   ├── (protected)/             ← authenticated screens
+│   │   ├── (tabs)/              ← main tab navigation
+│   │   └── onboarding/          ← onboarding flow (nationality, matches, neighborhood, profile)
+│   └── _layout.tsx              ← root layout; session guard via Stack.Protected
+├── constants/
+│   └── countries.ts             ← ISO country list for nationality picker
+├── context/
+│   └── supabase-context.ts
 ├── hooks/
-├── lib/
-│   └── supabase.ts
+│   ├── useSupabase.ts
+│   ├── useSignIn.ts
+│   └── useSignUp.ts
 ├── providers/
 │   └── supabase-provider.tsx
 └── supabase/
-    ├── migrations/              ← sequential SQL migration files
+    ├── migrations/              ← sequential SQL migration files (001–008)
     └── functions/               ← Edge Functions (push triggers, polling, Claude Vision)
 ```
 
-## Current State (Week 1, Day 1)
+## Current State (Week 1, Day 2)
 - [x] Repo scaffolded from expo-supabase-starter (Supabase version)
 - [x] CLAUDE.md initialized
 - [x] DECISIONS.md initialized
-- [x] 7 Supabase migration files generated
-- [ ] Onboarding flow (next task)
+- [x] 8 Supabase migrations applied (001–008)
+- [x] Onboarding Screen 1: nationality picker (`app/(protected)/onboarding/nationality.tsx`)
+- [ ] Onboarding Screen 2: match attendance selector
+- [ ] Onboarding Screen 3: neighborhood input
+- [ ] Onboarding Screen 4: profile photo + display name
 - [ ] Auth (email + Google OAuth)
 - [ ] Profile screen
 
 ## Active Task
 **Onboarding flow** — build one screen per session:
-1. Screen 1: Nationality picker (flag emoji + country name, searchable, ISO code stored)
+1. ~~Screen 1: Nationality picker~~ ✓ done
 2. Screen 2: Match attendance selector (pull LA fixtures from Football-Data.org, multi-select)
 3. Screen 3: Neighborhood input (free text + LA neighborhood suggestions)
 4. Screen 4: Profile photo upload (Supabase Storage) + display name
