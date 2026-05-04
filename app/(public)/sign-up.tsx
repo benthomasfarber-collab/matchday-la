@@ -32,6 +32,7 @@ export default function Page() {
 
     try {
       await verifyOtp({
+        email,
         token,
       });
     } catch (err) {

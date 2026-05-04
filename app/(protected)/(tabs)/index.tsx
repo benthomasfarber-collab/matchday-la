@@ -1,10 +1,11 @@
 import { Button, View } from "react-native";
 
-import { useClerk } from "@clerk/expo";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useSupabase } from "@/hooks/useSupabase";
+
 export default function Page() {
-  const { signOut } = useClerk();
+  const { signOut } = useSupabase();
   const insets = useSafeAreaInsets();
 
   const handleSignOut = async () => {

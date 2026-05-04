@@ -1,9 +1,7 @@
-import { router } from "expo-router";
-import { useAuth, useSignIn as useClerkSignIn } from "@clerk/expo";
+import { useSupabase } from "./useSupabase";
 
 export const useSignIn = () => {
-  const { isLoaded } = useAuth();
-  const { signIn } = useClerkSignIn();
+  const { isLoaded, supabase } = useSupabase();
 
   const signInWithPassword = async ({
     email,
@@ -12,31 +10,11 @@ export const useSignIn = () => {
     email: string;
     password: string;
   }) => {
-    if (!isLoaded) {
-      throw new Error("Sign in is not ready yet");
-    }
-
-    const { error } = await signIn.password({
-      identifier: email,
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
       password,
     });
-
-    if (error) {
-      throw error;
-    }
-
-    if (signIn.status === "complete") {
-      await signIn.finalize({
-        navigate: async ({ session }) => {
-          if (session.currentTask) {
-            console.log("Unhandled session task:", session.currentTask);
-            return;
-          }
-
-          router.replace("/");
-        },
-      });
-    }
+    if (error) throw error;
   };
 
   return {

@@ -1,13 +1,10 @@
 import { useEffect } from "react";
 
 import { Stack } from "expo-router";
-import { useConvexAuth } from "convex/react";
 import * as SplashScreen from "expo-splash-screen";
-import { ClerkProvider, useAuth } from "@clerk/expo";
-import { tokenCache } from "@clerk/expo/token-cache";
-import { ConvexProviderWithClerk } from "convex/react-clerk";
 
-import { convex } from "@/lib/convex";
+import { useSupabase } from "@/hooks/useSupabase";
+import { SupabaseProvider } from "@/providers/supabase-provider";
 
 SplashScreen.setOptions({
   duration: 500,
@@ -16,21 +13,22 @@ SplashScreen.setOptions({
 
 SplashScreen.preventAutoHideAsync();
 
-const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
-if (!publishableKey) {
-  throw new Error("Add EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY to your .env file");
+export default function RootLayout() {
+  return (
+    <SupabaseProvider>
+      <RootNavigator />
+    </SupabaseProvider>
+  );
 }
 
-const RootNavigator = () => {
-  const { isLoaded: isClerkLoaded, isSignedIn } = useAuth();
-  const { isLoading: isConvexLoaded } = useConvexAuth();
+function RootNavigator() {
+  const { isLoaded, session } = useSupabase();
 
   useEffect(() => {
-    if (isClerkLoaded && !isConvexLoaded) {
+    if (isLoaded) {
       SplashScreen.hide();
     }
-  }, [isClerkLoaded, isConvexLoaded]);
+  }, [isLoaded]);
 
   return (
     <Stack
@@ -41,23 +39,13 @@ const RootNavigator = () => {
         animationDuration: 0,
       }}
     >
-      <Stack.Protected guard={isSignedIn ?? false}>
+      <Stack.Protected guard={!!session}>
         <Stack.Screen name="(protected)" />
       </Stack.Protected>
 
-      <Stack.Protected guard={!isSignedIn}>
+      <Stack.Protected guard={!session}>
         <Stack.Screen name="(public)" />
       </Stack.Protected>
     </Stack>
-  );
-};
-
-export default function RootLayout() {
-  return (
-    <ClerkProvider publishableKey={publishableKey!} tokenCache={tokenCache}>
-      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-        <RootNavigator />
-      </ConvexProviderWithClerk>
-    </ClerkProvider>
   );
 }

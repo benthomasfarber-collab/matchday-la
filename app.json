@@ -1,31 +1,31 @@
 {
   "expo": {
-    "name": "expo-clerk-convex",
-    "slug": "expo-clerk-convex",
+    "name": "Matchday LA",
+    "slug": "matchday-la",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "scheme": "expo-clerk-convex",
+    "scheme": "matchday-la",
     "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
     "platforms": [
       "ios",
       "android"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.flemingvincent.expo-clerk-convex"
+      "bundleIdentifier": "com.matchdayla.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.flemingvincent.expoclerkconvex"
+      "edgeToEdgeEnabled": true,
+      "package": "com.matchdayla.app"
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store",
-      "@clerk/expo",
       [
         "expo-splash-screen",
         {
